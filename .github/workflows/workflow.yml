@@ -169,6 +169,8 @@ jobs:
           chmod 600 private_key.pem
           
           ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@$QA_EC2_IP << 'EOF'
+            echo "ecr login step"
+            echo ${#AWS_ECR_URI}
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_ECR_URI
 
             DB_HOST=$(aws ssm get-parameter --name "/app/DB_HOST" --with-decryption --query "Parameter.Value" --output text)
@@ -186,5 +188,7 @@ jobs:
 
             # Restart services with SSM-fetched credentials
             docker-compose -f docker-compose.yml down -v
+
+            echo "compose"
             docker-compose -f docker-compose.yml up -d
           EOF
