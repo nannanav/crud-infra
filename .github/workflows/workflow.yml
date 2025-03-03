@@ -138,6 +138,14 @@ jobs:
     needs: build-and-push
 
     steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
       - name: Allow SSH Access for GitHub Actions
         env:
           QA_EC2_IP: ${{ secrets.QA_EC2_IP }}
