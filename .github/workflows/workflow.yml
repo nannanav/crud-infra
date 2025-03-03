@@ -167,11 +167,20 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
+          echo ${#AWS_ECR_URI}
           
           ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@$QA_EC2_IP << 'EOF'
             echo "ecr login step"
             echo ${#AWS_ECR_URI}
-            echo ${{ secrets.AWS_ECR_URI }}
+
+            export AWS_ECR_URI=$AWS_ECR_URI
+            export DB_HOST=$DB_HOST
+            export DB_USER=$DB_USER
+            export DB_PASSWORD=$DB_PASSWORD
+            export DB_NAME=$DB_NAME
+
+            echo ${#AWS_ECR_URI}
+
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_ECR_URI
 
             DB_HOST=$(aws ssm get-parameter --name "/app/DB_HOST" --with-decryption --query "Parameter.Value" --output text)
@@ -180,12 +189,6 @@ jobs:
             DB_NAME=$(aws ssm get-parameter --name "/app/DB_NAME" --with-decryption --query "Parameter.Value" --output text)
 
             curl -O https://raw.githubusercontent.com/nannanav/crud-react-node-mySQL-go/main/docker-compose.yml
-
-            export AWS_ECR_URI=$AWS_ECR_URI
-            export DB_HOST=$DB_HOST
-            export DB_USER=$DB_USER
-            export DB_PASSWORD=$DB_PASSWORD
-            export DB_NAME=$DB_NAME
 
             # Restart services with SSM-fetched credentials
             docker-compose -f docker-compose.yml down -v
