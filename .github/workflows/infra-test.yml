@@ -3,7 +3,7 @@ name: Nightly Infra Test
 on:
   schedule:
     - cron: '0 0 * * *' # Runs every midnight UTC
-
+  workflow_dispatch:
 jobs:
   infra-test:
     runs-on: ubuntu-latest
