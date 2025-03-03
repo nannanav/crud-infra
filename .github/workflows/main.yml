@@ -16,6 +16,6 @@ jobs:
     # with:
     #   test_result: ${{ needs.test.outputs.test_result }}
 
-  deploy:
-    needs: build-and-push
-    uses: nannanav/crud-infra/.github/workflows/deploy.yml@main
+  # deploy:
+  #   needs: build-and-push
+  #   uses: nannanav/crud-infra/.github/workflows/deploy.yml@main
