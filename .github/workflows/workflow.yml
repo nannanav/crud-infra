@@ -138,6 +138,19 @@ jobs:
     needs: build-and-push
 
     steps:
+      - name: Allow SSH Access for GitHub Actions
+        env:
+          QA_EC2_IP: ${{ secrets.QA_EC2_IP }}
+        run: |
+          RUNNER_IP=$(curl -s https://checkip.amazonaws.com)
+          INSTANCE_ID=$(aws ec2 describe-instances --filters "Values=$QA_EC2_IP" --query 'Reservations[0].Instances[0].InstanceId' --output text)
+          GROUP_ID=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].SecurityGroups[0].GroupId' --output text)
+          aws ec2 authorize-security-group-ingress \
+            --group-id GROUP_ID \
+            --protocol tcp \
+            --port 22 \
+            --cidr $RUNNER_IP/32
+      
       - name: SSH into QA EC2 & Deploy
         env:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
