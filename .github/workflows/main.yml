@@ -11,11 +11,5 @@ jobs:
 
   build-and-push:
     needs: test
-    if: ${{ needs.test.outputs.test_result == '0' }}
+    if: needs.test.outputs.test_result == '0'
     uses: nannanav/crud-infra/.github/workflows/build-and-push.yml@main
-    # with:
-    #   test_result: ${{ needs.test.outputs.test_result }}
-
-  # deploy:
-  #   needs: build-and-push
-  #   uses: nannanav/crud-infra/.github/workflows/deploy.yml@main

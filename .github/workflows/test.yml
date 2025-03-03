@@ -97,8 +97,6 @@ jobs:
           
           SMOKE_TEST_STATUS=$(ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@$PUBLIC_IP "cat ~/crud-react-node-mySQL-go/smoke_test_result.txt")
           echo "test_output=$SMOKE_TEST_STATUS" >> $GITHUB_OUTPUT
-          # echo "SMOKE_TEST_STATUS=$SMOKE_TEST_STATUS" >> $GITHUB_ENV
-          # echo "smoke test result:$SMOKE_TEST_STATUS"
 
       # - name: Terminate EC2 Instance
       #   if: always()
