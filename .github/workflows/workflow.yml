@@ -154,7 +154,7 @@ jobs:
           INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=ip-address,Values=$QA_EC2_IP" --query 'Reservations[0].Instances[0].InstanceId' --output text)
           GROUP_ID=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].SecurityGroups[0].GroupId' --output text)
           aws ec2 authorize-security-group-ingress \
-            --group-id GROUP_ID \
+            --group-id $GROUP_ID \
             --protocol tcp \
             --port 22 \
             --cidr $RUNNER_IP/32
