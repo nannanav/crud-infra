@@ -169,9 +169,6 @@ jobs:
           
           ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@$QA_EC2_IP << 'EOF'
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URI }}
-            # Pull new images
-            docker pull ${{ secrets.AWS_ECR_URI }}/backend:latest
-            docker pull ${{ secrets.AWS_ECR_URI }}/frontend:latest
 
             DB_HOST=$(aws ssm get-parameter --name "/app/DB_HOST" --with-decryption --query "Parameter.Value" --output text)
             DB_USER=$(aws ssm get-parameter --name "/app/DB_USER" --with-decryption --query "Parameter.Value" --output text)
@@ -182,5 +179,5 @@ jobs:
 
             # Restart services with SSM-fetched credentials
             DB_HOST=$DB_HOST DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_NAME=$DB_NAME docker-compose -f docker-compose.yml down -v
-            DB_HOST=$DB_HOST DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_NAME=$DB_NAME docker-compose -f docker-compose.yml up --build -d
+            DB_HOST=$DB_HOST DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_NAME=$DB_NAME docker-compose -f docker-compose.yml up -d
           EOF
