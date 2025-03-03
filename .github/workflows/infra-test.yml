@@ -23,11 +23,11 @@ jobs:
         id: launch_ec2
         run: |
           INSTANCE_ID=$(aws ec2 run-instances \
-            --image-id ami-05b10e08d247fb927 \ # Amazon Linux 2023
+            --image-id ami-05b10e08d247fb927 \
             --instance-type t2.micro \
-            --key-name ${{ secrets.SSH_KEY_NAME }} \ # Ensure this key exists in AWS
-            --security-group-ids sg-0ad06222005aa8556 \ # Replace with your security group ID
-            --subnet-id subnet-0be339d69f911c198 \ # Replace with your private subnet
+            --key-name ${{ secrets.SSH_KEY_NAME }} \
+            --security-group-ids sg-0ad06222005aa8556 \
+            --subnet-id subnet-0be339d69f911c198 \
             --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=Test-EC2}]' \
             --query 'Instances[0].InstanceId' --output text)
           
@@ -52,7 +52,6 @@ jobs:
         run: |
           RUNNER_IP=$(curl -s https://checkip.amazonaws.com)
           aws ec2 authorize-security-group-ingress \
-            # --group-id sg-0ad06222005aa8556 \ # Replace with your security group ID
             --group-id $(aws ec2 describe-instances --instance-ids $EC2_INSTANCE_ID --query 'Reservations[0].Instances[0].SecurityGroups[0].GroupId' --output text) \
             --protocol tcp \
             --port 22 \
