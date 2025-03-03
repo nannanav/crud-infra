@@ -28,6 +28,7 @@ jobs:
             --key-name ${{ secrets.SSH_KEY_NAME }} \
             --security-group-ids sg-0ad06222005aa8556 \
             --subnet-id subnet-0be339d69f911c198 \
+            --associate-public-ip-address \
             --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=Test-EC2}]' \
             --query 'Instances[0].InstanceId' --output text)
           
