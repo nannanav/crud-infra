@@ -97,10 +97,10 @@ jobs:
           echo "smoke test result:$SMOKE_TEST_STATUS"
           echo "::set-output name=SMOKE_TEST_STATUS::$SMOKE_TEST_STATUS"
 
-      # - name: Terminate EC2 Instance
-      #   if: always()
-      #   run: |
-      #     aws ec2 terminate-instances --instance-ids $EC2_INSTANCE_ID
+      - name: Terminate EC2 Instance
+        if: always()
+        run: |
+          aws ec2 terminate-instances --instance-ids $EC2_INSTANCE_ID
 
   build-and-push:
     needs: infra-test
@@ -108,11 +108,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Application Repository (crud-react-node-mySQL-go)
         uses: actions/checkout@v4
+        with:
+          repository: nannanav/crud-react-node-mySQL-go
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
