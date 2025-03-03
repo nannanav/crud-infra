@@ -3,7 +3,7 @@ on:
   workflow_call:
     outputs:
       test_result:
-        description: "The result of the test
+        description: "The result of the test"
         value: ${{ jobs.test.outputs.result }}
 
 
