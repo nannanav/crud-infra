@@ -170,7 +170,7 @@ jobs:
           echo ${#AWS_ECR_URI}
           export AWS_ECR_URI=$AWS_ECR_URI
           
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@$QA_EC2_IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no -o SendEnv=AWS_ECR_URI -i private_key.pem ec2-user@$QA_EC2_IP << 'EOF'
             echo "ecr login step"
 
             echo ${#AWS_ECR_URI}
