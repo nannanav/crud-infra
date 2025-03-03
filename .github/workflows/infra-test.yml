@@ -95,10 +95,10 @@ jobs:
           SMOKE_TEST_STATUS=$(ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@$PUBLIC_IP "cat smoke_test_result.txt")
           echo "SMOKE_TEST_STATUS=$SMOKE_TEST_STATUS" >> $GITHUB_ENV
 
-      - name: Terminate EC2 Instance
-        if: always()
-        run: |
-          aws ec2 terminate-instances --instance-ids $EC2_INSTANCE_ID
+      # - name: Terminate EC2 Instance
+      #   if: always()
+      #   run: |
+      #     aws ec2 terminate-instances --instance-ids $EC2_INSTANCE_ID
 
       - name: Trigger Deployment Workflow
         if: env.SMOKE_TEST_STATUS == '0'  # Only trigger if smoke tests passed
