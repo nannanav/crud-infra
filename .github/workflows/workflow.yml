@@ -145,13 +145,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
-
+          
       - name: Allow SSH Access for GitHub Actions
         env:
           QA_EC2_IP: ${{ secrets.QA_EC2_IP }}
         run: |
           RUNNER_IP=$(curl -s https://checkip.amazonaws.com)
-          INSTANCE_ID=$(aws ec2 describe-instances --filters "Values=$QA_EC2_IP" --query 'Reservations[0].Instances[0].InstanceId' --output text)
+          INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=ip-address,Values=$QA_EC2_IP" --query 'Reservations[0].Instances[0].InstanceId' --output text)
           GROUP_ID=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].SecurityGroups[0].GroupId' --output text)
           aws ec2 authorize-security-group-ingress \
             --group-id GROUP_ID \
