@@ -191,6 +191,7 @@ jobs:
             export DB_USER=$DB_USER
             export DB_PASSWORD=$DB_PASSWORD
             export DB_NAME=$DB_NAME
+            export VITE_BACKEND_URL=/api/
 
             curl -O https://raw.githubusercontent.com/nannanav/crud-react-node-mySQL-go/main/docker-compose.yml
 
