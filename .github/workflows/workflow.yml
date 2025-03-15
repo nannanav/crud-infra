@@ -112,6 +112,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: nannanav/crud-react-node-mySQL-go
+      
+      - name: Get latest commit ID
+        run: |
+          echo "Latest commit: $(git rev-parse HEAD)"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
