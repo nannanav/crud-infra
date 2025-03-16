@@ -201,6 +201,9 @@ jobs:
             # Restart services with SSM-fetched credentials
             docker-compose -f docker-compose.yml down -v
 
-            echo "compose"
+            echo "Pulling latest images..."
+            docker-compose -f docker-compose.yml pull
+
+            echo "Starting containers..."
             docker-compose -f docker-compose.yml up -d
           EOF
