@@ -80,7 +80,7 @@ jobs:
             sudo usermod -aG docker $USER
             newgrp docker
 
-            sudo apt install docker-compose
+            sudo apt install -y docker-compose
             # sudo chmod +x /usr/local/bin/docker-compose
             
             # Clone the repository
@@ -185,6 +185,13 @@ jobs:
               -o SendEnv=AWS_SESSION_TOKEN \
               -i private_key.pem \
               ubuntu@$QA_EC2_IP << 'EOF'
+
+            if [ -n "$AWS_ACCESS_KEY_ID" ]; then
+                echo "AWS_ACCESS_KEY_ID is set"
+            else
+                echo "AWS_ACCESS_KEY_ID is not set"
+            fi
+
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URI }}
 
             DB_HOST=$(aws ssm get-parameter --name "/app/DB_HOST" --with-decryption --query "Parameter.Value" --output text)
