@@ -191,7 +191,7 @@ jobs:
                 echo "Failed to retrieve a valid DB_HOST"
                 exit 1
             else
-                echo "Successfully retrieved DB_HOST: $DB_HOST"
+                echo "Successfully retrieved DB_HOST"
             fi
             DB_USER=$(aws ssm get-parameter --name "/app/DB_USER" --with-decryption --query "Parameter.Value" --output text)
             DB_PASSWORD=$(aws ssm get-parameter --name "/app/DB_PASSWORD" --with-decryption --query "Parameter.Value" --output text)
