@@ -25,7 +25,7 @@ jobs:
         id: launch_ec2
         run: |
           INSTANCE_ID=$(aws ec2 run-instances \
-            --image-id ami-05b10e08d247fb927 \
+            --image-id ami-04b4f1a9cf54c11d0 \
             --instance-type t2.micro \
             --key-name ${{ secrets.SSH_KEY_NAME }} \
             --security-group-ids sg-0ad06222005aa8556 \
@@ -68,19 +68,20 @@ jobs:
           chmod 600 private_key.pem
           
           ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@$PUBLIC_IP << 'EOF'
-            sudo yum update -y
+            sudo apt update -y
             
             # Install Git
-            sudo yum install -y git
+            sudo apt install -y git
 
             # Install Docker
-            sudo yum install -y docker
+            sudo apt install -y docker.io
             sudo systemctl start docker
             sudo systemctl enable docker
-            sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
             sudo usermod -aG docker $USER
             newgrp docker
+
+            sudo apt install docker-compose
+            # sudo chmod +x /usr/local/bin/docker-compose
             
             # Clone the repository
             cd ~
