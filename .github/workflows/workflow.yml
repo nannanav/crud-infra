@@ -67,7 +67,7 @@ jobs:
           echo "$PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
           
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@$PUBLIC_IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@$PUBLIC_IP << 'EOF'
             sudo apt update -y
             
             # Install Git
@@ -93,7 +93,7 @@ jobs:
             echo $? > smoke_test_result.txt
           EOF
           
-          SMOKE_TEST_STATUS=$(ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@$PUBLIC_IP "cat ~/crud-react-node-mySQL-go/smoke_test_result.txt")
+          SMOKE_TEST_STATUS=$(ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@$PUBLIC_IP "cat ~/crud-react-node-mySQL-go/smoke_test_result.txt")
           echo "SMOKE_TEST_STATUS=$SMOKE_TEST_STATUS" >> $GITHUB_ENV
           echo "smoke test result:$SMOKE_TEST_STATUS"
           echo "::set-output name=SMOKE_TEST_STATUS::$SMOKE_TEST_STATUS"
@@ -184,7 +184,7 @@ jobs:
               -o SendEnv=AWS_SECRET_ACCESS_KEY \
               -o SendEnv=AWS_SESSION_TOKEN \
               -i private_key.pem \
-              ec2-user@$QA_EC2_IP << 'EOF'
+              ubuntu@$QA_EC2_IP << 'EOF'
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URI }}
 
             DB_HOST=$(aws ssm get-parameter --name "/app/DB_HOST" --with-decryption --query "Parameter.Value" --output text)
