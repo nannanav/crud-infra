@@ -187,6 +187,12 @@ jobs:
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URI }}
 
             DB_HOST=$(aws ssm get-parameter --name "/app/DB_HOST" --with-decryption --query "Parameter.Value" --output text)
+            if [ $? -ne 0 ] || [ -z "$DB_HOST" ]; then
+                echo "Failed to retrieve a valid DB_HOST"
+                exit 1
+            else
+                echo "Successfully retrieved DB_HOST: $DB_HOST"
+            fi
             DB_USER=$(aws ssm get-parameter --name "/app/DB_USER" --with-decryption --query "Parameter.Value" --output text)
             DB_PASSWORD=$(aws ssm get-parameter --name "/app/DB_PASSWORD" --with-decryption --query "Parameter.Value" --output text)
             DB_NAME=$(aws ssm get-parameter --name "/app/DB_NAME" --with-decryption --query "Parameter.Value" --output text)
