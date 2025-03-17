@@ -2,10 +2,8 @@ name: Deploy on Tag Creation
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ["Dispatch Infra Workflow on Tag"]
-    types:
-      - completed
+  repository_dispatch:
+    types: [new-tag]
 
 jobs:
   build-and-push:
