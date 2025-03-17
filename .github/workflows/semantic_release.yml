@@ -133,6 +133,13 @@ jobs:
             export DB_NAME=$DB_NAME
             export TAG=$LATEST_TAG
 
+            if [ $? -ne 0 ] || [ -z "$TAG" ]; then
+                echo "Failed to retrieve a valid TAG: $TAG LATEST_TAG: $LATEST_TAG"
+                exit 1
+            else
+                echo "Successfully retrieved TAG: $TAG LATEST_TAG: $LATEST_TAG"
+            fi
+
             curl -O https://raw.githubusercontent.com/nannanav/crud-react-node-mySQL-go/main/docker-compose.yml
 
             # Restart services with SSM-fetched credentials
