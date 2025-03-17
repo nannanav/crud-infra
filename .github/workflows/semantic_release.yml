@@ -1,0 +1,22 @@
+name: Deploy on Tag Creation
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Dispatch Infra Workflow on Tag"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Infra Repo
+        uses: actions/checkout@v4
+
+      - name: Get the latest tag from Source Repo
+        run: |
+          LATEST_TAG=$(git ls-remote --tags https://github.com/nannanav/crud-react-node-mySQL-go.git | awk '{print $2}' | grep -o 'v[0-9.]*' | sort -V | tail -n1)
+          echo "Deploying tag $LATEST_TAG"
+
+      # Add your deployment steps here
