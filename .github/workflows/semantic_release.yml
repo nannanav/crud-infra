@@ -58,11 +58,6 @@ jobs:
       - name: Checkout Infra Repo
         uses: actions/checkout@v4
 
-      - name: Get the latest tag from Source Repo
-        run: |
-          LATEST_TAG=$(git ls-remote --tags https://github.com/nannanav/crud-react-node-mySQL-go.git | awk '{print $2}' | grep -o 'v[0-9.]*' | sort -V | tail -n1)
-          echo "Deploying tag $LATEST_TAG"
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -86,7 +81,6 @@ jobs:
 
       - name: SSH into RC EC2 & Deploy
         env:
-          LATEST_TAG: ${{ needs.build-and-push.outputs.latest_tag }}
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           RC_EC2_IP: ${{ secrets.RC_EC2_IP }}
           AWS_ECR_URI: ${{ secrets.AWS_ECR_URI }}
@@ -98,14 +92,12 @@ jobs:
           chmod 600 private_key.pem
           echo ${#AWS_ECR_URI}
           export AWS_ECR_URI=$AWS_ECR_URI
-          echo "LATEST_TAG: $LATEST_TAG"
           
           ssh -o StrictHostKeyChecking=no \
               -o SendEnv=AWS_ECR_URI \
               -o SendEnv=AWS_ACCESS_KEY_ID \
               -o SendEnv=AWS_SECRET_ACCESS_KEY \
               -o SendEnv=AWS_SESSION_TOKEN \
-              -o SendEnv=LATEST_TAG \
               -i private_key.pem \
               ubuntu@$RC_EC2_IP << 'EOF'
 
@@ -128,7 +120,7 @@ jobs:
             DB_PASSWORD=$(aws ssm get-parameter --name "/app/DB_PASSWORD" --with-decryption --query "Parameter.Value" --output text)
             DB_NAME=$(aws ssm get-parameter --name "/app/DB_NAME" --with-decryption --query "Parameter.Value" --output text)
 
-            LATEST_TAG=$(git ls-remote --tags https://github.com/nannanav/crud-react-node-mySQL-go.git | awk '{print $2}' | grep -o 'v[0-9.]*' | sort -V | tail -n1)
+            LATEST_TAG=$(git ls-remote --tags https://github.com/nannanav/crud-react-node-mySQL-go.git | awk '{print $2}' | grep -o 'v[0-9][0-9.]*[^{}]*' | sort -V | tail -n1)
             echo "Latest tag: $LATEST_TAG"
 
             export DB_HOST=$DB_HOST
