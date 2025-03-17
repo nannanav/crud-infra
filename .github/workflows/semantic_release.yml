@@ -98,7 +98,7 @@ jobs:
           chmod 600 private_key.pem
           echo ${#AWS_ECR_URI}
           export AWS_ECR_URI=$AWS_ECR_URI
-          echo $LATEST_TAG
+          echo "LATEST_TAG: $LATEST_TAG"
           
           ssh -o StrictHostKeyChecking=no \
               -o SendEnv=AWS_ECR_URI \
