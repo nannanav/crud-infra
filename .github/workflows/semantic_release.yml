@@ -135,7 +135,7 @@ jobs:
 
             echo $LATEST_TAG
 
-            if [ $? -ne 0 ] || [ -z "$TAG" ]; then
+            if [ $? -ne 0 ] || [ -z "$LATEST_TAG" ]; then
                 echo "Failed to retrieve a valid TAG: $TAG LATEST_TAG: $LATEST_TAG"
                 exit 1
             else
