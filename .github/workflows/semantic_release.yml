@@ -133,6 +133,8 @@ jobs:
             export DB_NAME=$DB_NAME
             export TAG=$LATEST_TAG
 
+            echo $LATEST_TAG
+
             if [ $? -ne 0 ] || [ -z "$TAG" ]; then
                 echo "Failed to retrieve a valid TAG: $TAG LATEST_TAG: $LATEST_TAG"
                 exit 1
