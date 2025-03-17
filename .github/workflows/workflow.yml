@@ -134,9 +134,11 @@ jobs:
         run: |
           docker build --platform linux/amd64 -t ${{ secrets.AWS_ECR_URI }}/backend:latest ./backend
           docker build --platform linux/amd64 -t ${{ secrets.AWS_ECR_URI }}/frontend:latest ./frontend
+          docker build --platform linux/amd64 -t ${{ secrets.AWS_ECR_URI }}/internal-reverse-proxy:latest ./internal-reverse-proxy
           
           docker push ${{ secrets.AWS_ECR_URI }}/backend:latest
           docker push ${{ secrets.AWS_ECR_URI }}/frontend:latest
+          docker push ${{ secrets.AWS_ECR_URI }}/internal-reverse-proxy:latest
 
   deploy:
     runs-on: ubuntu-latest
